@@ -1,0 +1,86 @@
+@main("oceny", "oceny") {
+    <div class="ui segment">
+        <h1 class="ui header">Oceny</h1>
+        <div id="toolbar">
+            <div class="ui green tiny button enum_add">Dodaj ocenę</div>
+            <div class="filter">
+                <b>Klasa: </b>
+                <div class="ui dropdown">
+                    <div class="text">II A - 2013</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">2013</div>
+                        <div class="item">2012</div>
+                        <div class="item">2011</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter">
+                <b>Uczeń: </b>
+                <div class="ui dropdown">
+                    <div class="text">Jan Kowalski</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">2013</div>
+                        <div class="item">2012</div>
+                        <div class="item">2011</div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter">
+                <b>Kurs: </b>
+                <div class="ui dropdown">
+                    <div class="text">Matematyka</div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item">2013</div>
+                        <div class="item">2012</div>
+                        <div class="item">2011</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table class="ui column table segment">
+            <thead>
+                <tr>
+                    <th class="two wide">Stopień</th>
+                    <th class="ten wide">Waga</th>
+                    <th class="one wide"></th>
+                    <th class="one wide"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>3</td>
+                    <td>5 (sprawdzian)</td>
+                    <td>
+                        <div class="ui blue mini button user_delete" data-id="">edytuj</div>
+                    </td>
+                    <td>
+                        <div class="ui red mini button user_delete" data-id="">usuń</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>3 (kartkówka)</td>
+                    <td>
+                        <div class="ui blue mini button user_delete" data-id="">edytuj</div>
+                    </td>
+                    <td>
+                        <div class="ui red mini button user_delete" data-id="">usuń</div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>1 (zadanie domowe)</td>
+                    <td>
+                        <div class="ui blue mini button user_delete" data-id="">edytuj</div>
+                    </td>
+                    <td>
+                        <div class="ui red mini button user_delete" data-id="">usuń</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,30 @@
+@(activeMenu: String, js: String = "")(content: Html)
+<!DOCTYPE html>
+<html lang="en"><head>
+    <title>Dzida - admin</title>
+    <meta charset="utf-8">
+    <link rel="shortcut icon" type="image/png" href="@routes.Assets.at("images/favicon.ico")">
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/semantic.min.css")">
+
+    <script src="@routes.Assets.at("javascripts/jquery-1.8.2.min.js")" type="text/javascript"></script>
+    <script src="@routes.Assets.at("javascripts/semantic.min.js")" type="text/javascript"></script>
+    <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/style.css")">
+    @if(!js.isEmpty()){
+        @helper.requireJs(core = routes.Assets.at("javascripts/require.js").url, module = routes.Assets.at("javascripts/admin/"+js).url)
+    }
+</head>
+    <div class="ui menu" id="menu">
+        <a class="item @if(activeMenu == "users"){ active}" href="/users">Uczniowie</a>
+        <a class="item @if(activeMenu == "klasy"){ active}" href="/klasy">Klasy</a>
+        <a class="item" href=".">Kursy</a>
+        <a class="item @if(activeMenu == "oceny"){ active}" href="/oceny">Oceny</a>
+        <a class="item" href=".">Konkursy</a>
+        <a class="item" href=".">Nauczyciele</a>
+        <a class="item" href=".">Przedmioty</a>
+        <a class="item" href=".">Rangi konkursów</a>
+        <a class="item @if(activeMenu == "uprawnienia"){ active}" href="/uprawnienia">Uprawnienia</a>
+    </div>
+    <body>
+    @content
+    </body>
+</html>
