@@ -5,7 +5,7 @@ object Generator {
     GeneratorOsob.loadNames()
     val przedmioty = GeneratorKlas.tabelaPrzedmiotow
     val nauczyciele = GeneratorOsob.generujNauczycieli()
-    val klasy = GeneratorKlas.generujKlasy(10, 2013)
+    val klasy = GeneratorKlas.generujKlasy(3, 2010 to 2013)
     val uczniowie = GeneratorOsob.generujUczniow(klasy.lista)
     val kursy = GeneratorKlas.generujKursy(klasy.lista)
     val oceny = GeneratorKlas.generujOceny(kursy.lista, uczniowie.lista, klasy.lista)

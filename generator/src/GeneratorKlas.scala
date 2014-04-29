@@ -8,10 +8,10 @@ case class Przedmiot(nazwa: String) extends Rekord {
   def toSQL = s"('$nazwa')"
 }
 
-case class Klasa(rok: Int, nazwa: String, przedmioty: Set[Int]) extends Rekord {
+case class Klasa(rok: Int, poziom: Int, nazwa: String, przedmioty: Set[Int]) extends Rekord {
   val nauczyciele = GeneratorOsob.pobierzDlaKlasy(przedmioty)
 
-  def toSQL = s"('$nazwa', $rok)"
+  def toSQL = s"('$nazwa', $poziom, $rok)"
 }
 
 
@@ -57,14 +57,15 @@ object GeneratorKlas {
 
   def listaPrzedmiotow = (obowiazkowe ++ reszta).values.map(Przedmiot).toList
 
-  def generujKlasy(iloscProfili: Int, rok: Int) = {
+  def generujKlasy(iloscProfili: Int, lata: Range) = {
     val nrToName = (nr: Int) => ('A' + nr).toChar.toString
     profile = (0 to iloscProfili).map(nrToName andThen generujProfil).toList
     val lista = for {
-      (profil, nr) <- profile.zipWithIndex
+      rok <- lata.toList
       poziom <- 1 to 3
-    } yield new Klasa(rok, poziom.toString + profil.name, profil.klasa(poziom))
-    new Tabela(lista, "klasa", List("nazwa", "rok_utworzenia"))
+      (profil, nr) <- profile.zipWithIndex
+    } yield new Klasa(rok, poziom, poziom.toString + profil.name, profil.klasa(poziom))
+    new Tabela(lista, "klasa", List("nazwa", "poziom", "rok_utworzenia"))
   }
 
   def generujProfil(name: String) = {
