@@ -1,6 +1,6 @@
 html {
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   background: #CCCCCC;
 }
 
@@ -18,12 +18,36 @@ body {
   display: inline;
 }
 
+.filter select{
+    border: none;
+    font-size: 14px;
+}
+
+.editing {
+    background: rgb(255, 223, 166) !important;
+}
+
 /* semantic ui modification */
 body .ui.vertical.menu {
   margin: 0 0 1rem 0;
 }
 
+body .ui.modal {
+    width: 50%;
+  wi
+;
+    margin-left: -25%;
+}
+
 /* concrete styles */
 #menu {
   margin: 1rem 0 2rem;
+}
+
+#delete_window .ui.positive.button {
+  background-color: #D95C5C !important;
+}
+
+#delete_window .ui.positive.button:hover {
+  background-color: #E75859 !important;
 }
