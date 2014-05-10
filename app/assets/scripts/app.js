@@ -46,97 +46,16 @@ App.MissingRoute = Em.Route.extend({
     }
 });
 
-App.ClassesRoute = Ember.Route.extend({
-    beforeModel: function () {
-        var self = this;
-        return Ember.$.getJSON('/data/years').then(function (years) {
-            self.transitionTo('classesInYear', years[0]);
-        });
+App.RestElementController = Ember.ObjectController.extend({
+    init: function () {
+        this.set('needs', [this.get('parent')])
     },
-    redirect: function () {
-        this.refresh();
-    }
-});
-
-App.ApplicationController = Ember.Controller.extend({
-    selectedContentType: null,
-    selectContentType: [
-        {firstName: "Yehuda", id: 1},
-        {firstName: "Tom", id: 2}
-    ],
-    test: function () {
-        return this.get('selectedContentType.firstName') + " " +
-            this.get('selectedDate.firstName')
-    }.property('selectedContentType.firstName', 'selectedDate.firstName')
-});
-
-App.Class = DS.Model.extend({
-    name: DS.attr('string'),
-    yearOfCreation: DS.attr('number'),
-    level: DS.attr('number')
-});
-
-App.ClassesInYearRoute = Ember.Route.extend({
-    beforeModel: function () {
-        var self = this;
-        var classes = this.store.find('class');
-        var years = Ember.$.getJSON('/data/years').then(function (years) {
-            self.controllerFor('classesInYear').set('years', years);
-        });
-        return Ember.RSVP.all([classes, years]);
-    },
-    model: function (params) {
-        this.controllerFor('classesInYear').set('year', parseInt(params.year));
-        return this.store.filter('class', function (record) {
-            return record.get('yearOfCreation') == params.year;
-        });
-    }
-});
-App.ClassesInYearController = Ember.ArrayController.extend({
-    year: null,
-    years: null,
-    levels: [1, 2, 3],
-    classes: function () {
-        return this.get('model')
-    }.property('year', 'model'),
-
-    newClassName: "IA",
-    newClassYearOfCreation: 2013,
-    newClassLevel: 1,
-    classToDelete: null,
-    yearChange: function () {
-        this.set('newClassYearOfCreation', this.get('year'));
-        this.transitionToRoute('classesInYear', this.get('year'));
-    }.observes('year'),
-    actions: {
-        showAddModal: function () {
-            $('#add_window').modal('show');
-        },
-        add: function () {
-            this.store.createRecord('class', {
-                name: this.get('newClassName'),
-                yearOfCreation: this.get('newClassYearOfCreation'),
-                level: this.get('newClassLevel')
-            }).save();
-        },
-        cancelDelete: function () {
-            $('#delete_window').modal('hide');
-        },
-        'delete': function () {
-            var myClass =  this.get('classToDelete');
-            myClass.destroyRecord();
-        }
-    }
-});
-
-App.ClassController = Ember.ObjectController.extend({
-    needs: ['classesInYear'],
     isEditing: false,
     actions: {
         'delete': function () {
-            var myClass = this.get('model');
-            this.get('controllers.classesInYear').set('classToDelete', myClass);
-            var name = myClass.get('name') + " (" + myClass.get('yearOfCreation') + ") ";
+            var element = this.get('model');
+            this.get('controllers.' + this.get('parent')).set('elementToDelete', element);
+            var name = element.get('name') + " (" + element.get('yearOfCreation') + ") ";
             $('#delete_window_class').text(name);
             $('#delete_window').modal('show');
         },
@@ -155,5 +74,115 @@ App.ClassController = Ember.ObjectController.extend({
                 this.set('isEditing', true)
             }
         }
+    }
+});
+
+App.RestController = Ember.ArrayController.extend({
+    init: function () {
+        this.set('elementToCreate', [this.get('defaultElementToCreate')])
+    },
+    restoreElementToCreate: function () {
+        var defaultElement = this.get('defaultElementToCreate');
+        var newElement = this.get('elementToCreate');
+        console.log("ej", defaultElement);
+        for (var key in defaultElement) {
+            if (defaultElement[key] !== null) {
+                console.log(newElement[key]);
+                console.log(defaultElement[key]);
+                this.set('elementToCreate.' + key, defaultElement[key]);
+            }
+        }
+    },
+    elementToCreate: null,
+    elementToDelete: null,
+    actions: {
+        showAddModal: function () {
+            $('#add_window').modal('show');
+        },
+        add: function () {
+            this.store.createRecord(this.get('className'), this.get('elementToCreate')).save();
+            this.restoreElementToCreate();
+        },
+        cancelAdd: function () {
+            this.restoreElementToCreate();
+        },
+        cancelDelete: function () {
+            $('#delete_window').modal('hide');
+        },
+        'delete': function () {
+            var myClass = this.get('elementToDelete');
+            myClass.destroyRecord();
+        }
+    }
+});
+
+App.Class = DS.Model.extend({
+    name: DS.attr('string'),
+    yearOfCreation: DS.attr('number'),
+    level: DS.attr('number')
+});
+App.ClassController = App.RestElementController.extend({
+    parent: 'classesInYear'
+});
+
+App.ClassesRoute = Ember.Route.extend({
+    beforeModel: function () {
+        var self = this;
+        return Ember.$.getJSON('/data/years').then(function (years) {
+            self.transitionTo('classesInYear', years[0]);
+        });
+    },
+    redirect: function () {
+        this.refresh();
+    }
+});
+App.ClassesInYearRoute = Ember.Route.extend({
+    beforeModel: function () {
+        var self = this;
+        var classes = this.store.find('class');
+        var years = Ember.$.getJSON('/data/years').then(function (years) {
+            self.controllerFor('classesInYear').set('years', years);
+        });
+        return Ember.RSVP.all([classes, years]);
+    },
+    model: function (params) {
+        this.controllerFor('classesInYear').set('year', parseInt(params.year));
+        return this.store.filter('class', function (record) {
+            return record.get('yearOfCreation') == params.year;
+        });
+    }
+});
+App.ClassesInYearController = App.RestController.extend({
+    className: 'class',
+    defaultElementToCreate: {
+        name: "",
+        yearOfCreation: null,
+        level: null
+    },
+    year: null,
+    years: null,
+    levels: [1, 2, 3],
+    yearChange: function () {
+        this.set('elementToCreate.yearOfCreation', this.get('year'));
+        this.transitionToRoute('classesInYear', this.get('year'));
+    }.observes('year')
+});
+
+App.Subject = DS.Model.extend({
+    name: DS.attr('string')
+});
+App.SubjectController = App.RestElementController.extend({
+    parent: 'subjects'
+});
+
+App.SubjectsRoute = Ember.Route.extend({
+    model: function () {
+        return this.store.find('subject');
+    }
+});
+App.SubjectsController = App.RestController.extend({
+    className: 'subject',
+    defaultElementToCreate: {
+        name: ""
     }
 });

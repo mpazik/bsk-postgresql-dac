@@ -3,19 +3,25 @@
 # ~~~~
 
 # Home page
-GET           /                        controllers.Application.index()
+GET           /                         controllers.Application.index()
 
 # Map static resources from the /public folder to the /assets URL path
-GET           /assets/*file            controllers.Assets.at(path="/public", file)
+GET           /assets/*file             controllers.Assets.at(path="/public", file)
 
 # Rest API
-GET           /data/years              controllers.Data.years()
-GET           /data/classes            controllers.Data.classes()
-GET           /data/classes/:id        controllers.Data.oneClass(id: Int)
-POST          /data/classes            controllers.Data.addClass()
-PUT           /data/classes/:id        controllers.Data.updateClass(id: Int)
-DELETE        /data/classes/:id        controllers.Data.deleteClass(id: Int)
+GET           /data/years               controllers.Data.years()
+GET           /data/classes             controllers.ClassController.list()
+GET           /data/classes/:id         controllers.ClassController.single(id: Int)
+POST          /data/classes             controllers.ClassController.create()
+PUT           /data/classes/:id         controllers.ClassController.update(id: Int)
+DELETE        /data/classes/:id         controllers.ClassController.delete(id: Int)
+
+GET           /data/subjects            controllers.SubjectController.list()
+GET           /data/subjects/:id        controllers.SubjectController.single(id: Int)
+POST          /data/subjects            controllers.SubjectController.create()
+PUT           /data/subjects/:id        controllers.SubjectController.update(id: Int)
+DELETE        /data/subjects/:id        controllers.SubjectController.delete(id: Int)
 
 
 # Redirect other adresses to index to ember.js
-GET           /*page                   controllers.Application.page(page)
+GET           /*page                    controllers.Application.page(page)

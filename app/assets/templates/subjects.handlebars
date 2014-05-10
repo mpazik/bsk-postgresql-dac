@@ -1,10 +1,11 @@
 <div class="ui modal" id="delete_window">
     <i class="close icon"></i>
+
     <div class="header">
         Potwierdzenie
     </div>
     <div class="content">
-        Jesteś pewien, że chcesz usunąć klasę <span id="delete_window_class"></span>?
+        Jesteś pewien, że chcesz usunąć <span id="delete_window_class"></span>?
     </div>
     <div class="actions">
         <div class="ui green button" {{action cancelDelete}}>Nie</div>
@@ -13,19 +14,12 @@
 </div>
 <div class="ui modal" id="add_window">
     <i class="close icon"></i>
-    <div class="header">Dodaj nową klasę</div>
+
+    <div class="header">Dodaj nowy przedmiot</div>
     <div class="content ui form">
         <div class="field">
             <label>Nazwa</label>
             {{input type="text" value=newClassName}}
-        </div>
-        <div class="field">
-            <label>Poziom</label>
-            {{view Ember.Select content=levels selection=newClassLevel}}
-        </div>
-        <div class="field">
-            <label>Rok utworzenia</label>
-            {{input type="text" value=newClassYearOfCreation}}
         </div>
     </div>
     <div class="actions">
@@ -34,21 +28,15 @@
     </div>
 </div>
 <div class="ui segment">
-    <h1 class="ui header">Klasy</h1>
+    <h1 class="ui header">Przedmioty</h1>
 
     <div id="toolbar">
-        <div class="ui green tiny button enum_add" {{action showAddModal}}>Dodaj klasę</div>
-        <div class="filter">
-            <b>Rok utworzenia: </b>
-            {{view Ember.Select content=years selection=year}}
-        </div>
+        <div class="ui green tiny button enum_add" {{action showAddModal}}>Dodaj przedmiot</div>
     </div>
     <table class="ui column table segment">
         <thead>
         <tr>
             <th class="three wide">Nazwa</th>
-            <th class="three wide">Poziom</th>
-            <th class="six wide">Rok utworzenia</th>
             <th class="one wide"></th>
             <th class="one wide"></th>
         </tr>
@@ -58,15 +46,11 @@
             <tr {{bind-attr class="isEditing:editing"}} {{action "toggle" on="doubleClick"}}>
                 {{#if isEditing}}
                     <td>{{auto-focus value=name insert-newline="accept"}}</td>
-                    <td>{{input value=level insert-newline="accept"}}</td>
-                    <td>{{input value=yearOfCreation insert-newline="accept"}}</td>
                     <td>
                         <div class="ui orange mini button" {{action accept}}>akceptuj</div>
                     </td>
                 {{else}}
                     <td>{{name}}</td>
-                    <td>{{level}}</td>
-                    <td>{{yearOfCreation}}</td>
                     <td>
                         <div class="ui blue mini button" {{action edit}}>edytuj</div>
                     </td>
